@@ -73,6 +73,8 @@
   
   ```
 
+## STORY 05-2 재귀 알고리즘 분석
+
 > Dynamic Programing(DP)
 
 동적계획법
@@ -95,4 +97,258 @@
   > Bottom up(상향식 분석)
 
 - for문을 이용해서 처음값부터 다음값을 계산해 나가는 방식
+
 - 함수를 별도로 호출하지 않아 시간과 메모리를 절약할 수 있다.
+
+
+## STORY 05-3 하노이탑
+
+- 3개의 기둥이 존재한다.
+- 모든 원반에서는 번호가 존재하고, 큰 원반 위에 작은 원반이 놓아져야 한다.(역전 되는 현상이 존재하면 안 된다.)
+- 모든 원반을 한 쪽기둥으로 옮겨야 한다.
+
+```
+- 시작 기둥/ 중간 기둥/ 목표 기둥
+- 쌓여있는 원반에서 n-1인 원반이 한 그룹이다.
+
+원반의 갯수 2개 일때,
+STEP01.그룹을 중간 기둥으로 옮긴다.
+STEP02.원반 2를 목표 기둥으로 옮긴다.
+STEP03.그룹을 목표기둥으로 옮긴다.
+
+원반의 갯수 3개 일때,
+STEP01.그룹을 중간 기둥으로 옮긴다.
+STEP02.원반 3을 목표 기둥으로 옮긴다.
+STEP03.그룹을 목표기둥으로 옮긴다.
+
+원반의 갯수 4개 일때,
+STEP01.그룹을 중간 기둥으로 옮긴다.
+STEP02.원반 4를 목표 기둥으로 옮긴다.
+STEP03.그룹을 목표기둥으로 옮긴다.
+
+참고)
+원반이 3개 있을때(1,2,3) top에 1이 있다 가정하고 1을 세번째로 옮길지 2번째 옮길지 고민이 될 수 있다. 그런데 원반 1을 세번째 기둥으로 옮기는 것이 최소 횟수로 하노이탑을 완성할 수 있다.
+```
+
+```c++
+#include <iostream>
+#define A 1
+#define B 2
+#define C 3
+using namespace std;
+
+void hanoi(int n, int srt, int des) {
+
+	if (n > 1)
+		hanoi(n - 1, srt, 6 - srt - des);
+
+	printf("원반(%d)을 %d 기둥에서 %d 기둥으로 옮김\n", n, srt, des);
+
+	if (n > 1)
+		hanoi(n - 1, 6 - srt - des, des);
+}
+
+void hanoi2(int n, char s, char m, char d) {
+
+
+	if (n > 1)
+		hanoi2(n - 1, s, m, d);
+
+	printf("원반(%d)을 %c 기둥에서 %c 기둥으로 옮김\n", n, s, d);
+
+	if (n > 1)
+		hanoi2(n - 1,m,s,d);
+}
+
+
+int main(void) {
+	int n;
+	printf("하노이의 탑\n");
+	printf("원반 개수:");
+	cin >> n;
+
+	hanoi(n, 1, 3);
+	hanoi2(n, 'A','B','C');
+
+}
+```
+
+
+
+## STORY 05-4 8퀸 문제
+
+- 8개의 퀸을 공격하지 못하게 체스판에 놓은 방법
+
+> 원초적 접근
+
+- 8*8판에 퀸을 1개 놓을 때 64칸 중 아무곳에나 둘 수 있다.
+- 그 다음 부터 63, 62,...칸 둘 수 있다.
+- 경우의 수: 64 * 63 * 62 * 61 * 60 * 59 * 58 * 57 = 178,462,987,637,760(가지 수)
+
+> 각 열에 퀸을 1개만 배치한다.
+
+- 8 * 8 * 8 * 8 * 8 * 8 * 8 * 8 = 16,777,216(가지 수)
+- 가지 뻗기(모든 조합을 나열)
+- 하노이탑이나 8퀸 문제 처럼 문제를 세분하고 세분된 작은 문제의 풀이를 결합해 전체 문제를 푸는 것을 Divide and conquer(분할 해결법)이라 한다.(ex. quick sort, merge sort)
+
+```c++
+#include <stdio.h>
+int pos[8];
+
+void print() {
+
+	for (int i = 0; i < 8; i++) {
+		printf("%2d", pos[i]);
+	}
+	printf("\n");
+
+}
+
+
+//i열, j행
+void set(int i) {
+	
+	for (int j = 0; j < 8; j++) {
+		pos[i] = j;
+		if (i == 7)
+			print();
+
+		else
+			set(i + 1);
+
+
+	}
+
+}
+
+int main(void) {
+
+	printf("8퀸 문제");
+	set(0);
+}
+```
+
+
+
+> 각 열에 퀸을 1개, 각 행에 퀸을 1개 배치한다.
+
+> 대각선 배치 고려
+
+
+
+모든 경우를 구하는 방법을 **가지뻗기(branching)**이라 한다. 이러한 가지에서 불필요한 조합을 없애는 것을 **한정(bounding)조작** 이라고 한다. 이 두 개를 조합해서 문제를 푸는 방법을 **분기 한정법(branching and bounding method)**이라한다. 
+
+
+
+N-Queen 문제
+
+https://www.acmicpc.net/problem/9663
+
+```c++
+#include<iostream>
+#include<string.h>
+using namespace std;
+bool visit[15][15];
+
+int n;
+int num;
+bool check(int i, int j) {
+
+	int next_i = i;
+	int next_j = j;
+	//  / check
+	while (true) {
+
+		next_i = next_i - 1;
+		next_j = next_j + 1;
+		if (next_i < 0 || next_j >= n)
+			break;
+
+		if (visit[next_i][next_j] == true)
+			return false;
+
+
+	}
+
+
+	next_i = i;
+	next_j = j;
+
+	//  \ check
+	while (true) {
+		next_i = next_i - 1;
+		next_j = next_j - 1;
+
+		if (next_i < 0 || next_j < 0)
+			break;
+
+		if (visit[next_i][next_j] == true)
+			return false;
+
+	}
+
+	// ^|
+
+	next_i = i;
+	next_j = j;
+
+	while (true) {
+		next_i = next_i - 1;
+
+		if (next_i < 0)
+			break;
+
+		if ((visit[next_i][next_j] == true))
+			return false;
+
+
+	}
+
+	return true;
+
+}
+
+
+
+void solve(int node, int cnt) {
+	bool decision = false;
+
+
+	if (cnt == n) {
+		num++;
+		return;
+	}
+
+
+	for (int i = 0; i < n; i++) {
+
+		if (visit[node][i] == false) {
+
+			decision = check(node, i);
+
+			if (decision == true) {
+				visit[node][i] = true;
+				solve(node + 1, cnt + 1);
+				visit[node][i] = false;
+			}
+
+
+		}
+
+	}
+
+
+}
+
+
+
+int main(void) {
+
+	cin >> n;
+	solve(0,0);
+	cout << num;
+
+}
+
+```
+
