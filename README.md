@@ -1,7 +1,7 @@
 # TIL
 Today I Learned
 
-> 2019년 1월
+> **2019년 1월**
 
 - [ ] Algorithm(2018 SW 역량 테스트 준비 - 기초, https://code.plus/course/32)  
 - [ ] Algorithm(2018 SW 역량 테스트 준비 - 연습, https://code.plus/course/33)
