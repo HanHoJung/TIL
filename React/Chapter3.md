@@ -309,7 +309,7 @@ props와 state
 
 - props 값이 고정적이라고 볼 수 있지만 그렇지 않다. 자식 컴포넌트에서 특정 이벤트가 발생할 때 부모 컴포넌트의 메서드를 호출하면 props도 유동적으로 변경될 수 있기 때문입니다.
 
-![state&props](D:./img/state&props.PNG)
+![state&props](./img/state&props.PNG)
 
 
 
