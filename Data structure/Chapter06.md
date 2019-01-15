@@ -282,13 +282,17 @@ int main(void) {
 
 **장점**
 
-- 정렬되어 있는 경우를 비교를 하지 않아 버블정렬의 비교 횟수를 줄임
+- 정렬을 마쳤거나(정렬 완료 상태) 정렬을 마친 상태에 가까우면 정렬 속도가 매우 빠릅니다.
 
 
 
 **단점**
 
-- 배열의 크기가 커질수록 효율이 떨어짐
+- 삽입할 위치가 멀리 떨어져 있으면 대입해야 하는 횟수가 많아 효율성이 떨어진다.
+
+  ex)
+
+   1 2 3 4 5 **0** 6(내림차순으로 정렬)
 
 
 
@@ -328,40 +332,35 @@ void show(vector<int> &arr, int n) {
 void insert(vector<int> &arr) {
 	int n = arr.size();
 	for (int i = 1; i < n; i++) {
-		for (int j = i; j >= 1 ; j--) {
-			if (arr[j - 1] > arr[j]) {
-				int temp;
-				temp = arr[j];
-				arr[j] = arr[j - 1];
-				arr[j - 1] = temp;
-			}
-			else {
-				break;
-			}
-			show(arr,n);
-		}
+		int j;
+		int temp = arr[i];
+		cout << "정렬 선택 요소:" << "arr[" << i << "]=" << temp << "\n";
+		for (j = i; j >= 1 && arr[j - 1] > temp; j--) {
+			arr[j] = arr[j - 1];
+			show(arr, n);
 
+		}
+		arr[j] = temp;
+		show(arr, n);
 	}
 }
 
 ////내림차순
 void insert2(vector<int> &arr) {
+	
 	int n = arr.size();
 	for (int i = 1; i < n; i++) {
-		for (int j = i; j >= 1; j--) {
-			if (arr[j - 1] < arr[j]) {
-				int temp;
-				temp = arr[j];
-				arr[j] = arr[j - 1];
-				arr[j - 1] = temp;
-			}
-			else {
-				break;
-			}
-			show(arr, n);
+		int j;
+		int temp = arr[i];
+
+		for (j = i; j >= 1 && arr[j - 1] < temp; j--) {
+			arr[j] = arr[j - 1];
+
 		}
+		arr[j] = temp;
 
 	}
+	show(arr, n);
 }
 
 int main(void) {
@@ -381,6 +380,195 @@ int main(void) {
 
 }
 ```
+
+
+
+### 셸 정렬
+
+> 정의: 셸 정렬은 정렬할 **배열의 요소**를 **그룹**으로 나눠 그 그룹별로 삽입 정렬을 수행하고 합치는 과정을 반복 
+
+​              하여 **요소의 이동횟수**를 줄이는 알고리즘 입니다.
+
+=> 아래 그림은 선택정렬 할 때의 모습입니다. 이미 정렬이 된 요소를 정렬하기 때문에 각 요소의 이동(대입) 연산       
+
+​     은 발생하지 않습니다. 그러나 0 위치를 찾는데 총 6회의 이동이 필요합니다. 이 문제를 해결할 수 있는것이
+
+​     셸 정렬 입니다.
+
+![shell](D:./img/shell.PNG)
+
+
+
+셸 정렬을 하면 0의 이동횟수를 총 5회 안으로 줄일 수 있습니다.
+
+![shell](D:./img/shell1.PNG)
+
+
+
+**방법**
+
+- 증분값(h)를 기준으로 그룹을 나눕니다.
+
+- 그룹별로 삽입정렬을 진행합니다.
+
+- 정렬이 완료될 때까지 해당 과정을 반복합니다.
+
+
+그룹을 나눌 때 값을 증분값이라고 합니다. 
+
+우선, h=n/2(h>=1)로 시작하고  그룹별로 나누어서 셸 정렬의 모습을 살펴봅시다.
+
+
+
+**장점**
+
+- 삽입정렬의 단점을 보안할 수 있습니다.
+
+**단점**
+
+- stable 하지 않다.
+- 증분값에 따라 성능이 달라진다.
+
+
+
+**시간 복잡도**
+
+O(n<sup>2</sup>) =>최악의 경우
+
+O(n<sup>1.5</sup>) =>평균적인 경우
+
+
+
+![shell3](./img/shell3.PNG)
+
+
+
+
+
+h=4 일때
+
+4개의 그룹으로 나타낼 수 있습니다.
+
+| 증분값(h) |       그룹        |      그룹값       |
+| :-------: | :---------------: | :---------------: |
+|     4     |       {0,4}       |        8,7        |
+|     4     |       {1,5}       |        1,6        |
+|     4     |       {2,6}       |        4,3        |
+|     4     |       {3,7}       |        2,5        |
+|     2     |     {0,4,2,6}     |     {8,7,4,3}     |
+|     2     |     {1,5,3,7}     |     {1,6,2,5}     |
+|     1     | {0,1,2,3,4,5,6,7} | {8,1,4,2,7,6,3,5} |
+
+=>h=4 흰색 그룹과 회색 그룹
+
+​    h=2 흰색 그룹과 회색 그룹
+
+​    흰색 그룹의 요소들과 회색 그룹의 요소가 썩이지 않는다.
+
+=>증분값을 짝수로 하다 보니 요소가 썩이지 않는 문제가 발생합니다. 때문에 그룹을 나누었음에도 정렬 알고리즘의 원하는 성능이 나오지 않습니다. 때문에 증분값 h를 홀수로 진행되게 만들어야 효율적인 성능을 얻을 수 있습니다. 때문에, 셸정렬의 핵심은 증분값 설정에 있습니다.
+
+
+
+
+
+```c++
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void show(vector<int> &arr, int n) {
+
+	for (int i = 0; i < n; i++) {
+		cout << arr[i] << " ";
+	}
+	cout << "\n";
+}
+
+
+//오름차순
+void shell(vector<int> &arr) {
+	int n = arr.size();
+	int h, i, j;
+
+	for (h = n / 2; h >= 1; h = h / 2) {
+		cout << "h=" << h << "\n";
+		for (i = h; i < n; i++) {
+			int temp = arr[i];
+			cout << "정렬 선택요소:arr[" << i << "]=" << arr[i] << "\n";
+			for (j = i - h; j >= 0 && arr[j] > temp; j = j - h) {
+				arr[j + h] = arr[j];
+				show(arr, n);
+			}
+			
+			arr[j+h] = temp;
+			show(arr, n);
+		}
+		
+	}
+	
+
+
+}
+
+//내림차순
+void shell2(vector<int> &arr) {
+	int n = arr.size();
+	int h, i, j;
+
+	for (h = n / 2; h >= 1; h = h / 2) {
+		cout <<"h="<< h << "\n";
+		for (i = h; i < n; i++) {
+			int temp = arr[i];
+
+			for (j = i - h; j >= 0 && arr[j] < temp; j = j - h) {
+				arr[j + h] = arr[j];
+			}
+
+			arr[j + h] = temp;
+			show(arr, n);
+		}
+		show(arr, n);
+	}
+
+
+
+}
+
+int main(void) {
+
+	int n;
+	cin >> n;
+	vector<int> arr(n);
+
+	for (int i = 0; i < n; i++) {
+		int input;
+		cin >> input;
+		arr[i] = input;
+	}
+
+	shell(arr);
+
+
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
