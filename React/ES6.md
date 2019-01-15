@@ -22,11 +22,11 @@
 
 ```javascript
 setTimeout(function(){
-    	console.log('Hello Coding")
+    	console.log('Hello Coding')
 },1000);
     
 setTimeout(()=>{
-        console.log('Hello Coding")
+        console.log('Hello Coding')
     },1000);
 ```
 
