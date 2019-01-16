@@ -1,6 +1,8 @@
 # ES6 문법
 
 > 1.1 Arrow Function
+>
+> 1.2 Dynamic Object Keys
 
 
 
@@ -70,6 +72,18 @@ const triple =(value) => value * 3;
 
 
 
+### 1.2 Dynamic Object Keys(동적 객체 키)
 
+- ES6에서는 [myKey] 대괄호 구문을 사용하여 계산된 값을 객체 리터럴 키로 사용할 수 있습니다.
+
+```javascript
+const chosenAnimal = 'cat'
+const animals = {
+  [`animal${chosenAnimal}`]: true,
+}
+console.log(animals.animalcat) // true
+```
+
+https://blog.wonhada.com/?p=3041
 
 
