@@ -103,13 +103,13 @@ cf)이더넷헤더(=MAC헤더)
 
 **(a) 데이터를 저장한 패킷**
 
-![](D:./Img/packet.PNG)
+![](./Img/packet.PNG)
 
 **(b) 제어 정보만 있는 패킷**
 
 접속 동작에서는 아직 데이터 송수신이 없기 때문에 패킷에 데이터 부분이 없다.
 
-![packet2](D:/TIL/Network/Img/packet2.PNG)
+![packet2](./Img/packet2.PNG)
 
 
 
