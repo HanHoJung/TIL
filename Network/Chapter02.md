@@ -4,7 +4,7 @@
 
 ## STORY 01 소켓을 작성한다.
 
-![protocolStack](D:./Img\protocolStack.PNG) 
+![protocolStack](D:./Img/protocolStack.PNG) 
 
 > 프로토콜 스택의 내부 구성
 
