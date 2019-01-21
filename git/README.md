@@ -57,7 +57,7 @@ gistory
 
 ![add(1)](./assets/add(2).PNG)
 
-- git add f1.txt f2.txt를 하면 .git 디렉토리 내에 **index ** 파일과   **./objects**   디렉터리가 생성됩니다.
+- git add f1.txt f2.txt를 하면 .git 디렉토리 내에 **index** 파일과   **./objects**   디렉터리가 생성됩니다.
 
 - **./objects** 디렉터리 내에 생긴 각각 파일은 f1.txt f2.txt 파일을 의미합니다. 또한, 그 파일의 내용은
 
@@ -126,7 +126,7 @@ git add f1.txt
 git commit -m 2
 ```
 
-![commit(4)](D:./assets/commit(4).PNG)
+![commit(4)](./assets/commit(4).PNG)
 
 - objects 파일의 종류
   1. 파일의 내용을 담고 있는 파일(blob)
@@ -141,7 +141,7 @@ git commit -m 2
 
 > status의 원리
 
-![status(1)](D:./assets/status(1).PNG)
+![status(1)](./assets/status(1).PNG)
 
 - 현재 상태는 working director 영역과 Index, repository 영역의 파일의 내용이 모두 같은 상태를 의미합니다.
 
@@ -149,11 +149,11 @@ git commit -m 2
 
 
 
-![status(2)](D:./assets/status(2).PNG)
+![status(2)](./assets/status(2).PNG)
 
 - 파일이 수정 되었음을 감지하는 방법을 추정해보면 대략 이렇다. Index 파일은 항상 파일의 최신 상태를 나타내고 있습니다. 만약 file이 수정되면 파일의 내용을 sha1 알고리즘으로 해시 한 파일명과 Index 파일 내용과 다르면 파일이 수정됨을 알 수 있습니다.
 
-![status(3)](D:./assets/status(3).PNG)
+![status(3)](./assets/status(3).PNG)
 
 - git은 Index라는 object 파일과 최신 commit을 나타내는 object 파일의 내용 비교를 통하여 그 내용이 일치하면 **commit할 내용이 없는 것**이고 일치하지 않는다면 **commit 대기 상태**를 나타냅니다.
 
