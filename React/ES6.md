@@ -7,6 +7,8 @@
 > 1.3 Destructurning assignment
 >
 > 1.4 Map
+>
+> 1.5 Slice, Filter, spread operator
 
 
 
@@ -175,4 +177,51 @@ const processed = numbers.map(num=>num*num);
 console.log(processed);
 
 ```
+
+
+
+
+
+### 1.5 Slice, Filter, spread operator
+
+> Slice 함수
+
+배열의 일부분을 선택하여 새로운 배열을 만듭니다.
+
+배열의 start에 해당하는 요소부터 end 바로 전의 요소까지 선택해서 새로운 배열을 만듭니다.
+
+```javascript
+array.slice(start, end)
+ var jbAry = [ 'One', 'Two', 'Three', 'Four', 'Five', 'Six' ];
+ var jbSlc = jbAry.slice( 1, 4 );
+//Two', 'Three', 'Four'
+```
+
+
+
+> Filter
+
+특정 조건을 걸어 요소를 제거하고 새로운 배열을 만듭니다.
+
+```javascript
+var arr = [5,10,2];
+arr2 = arr.filter((item,index)=>{
+    console.log(item)
+    return item % 5 == 0;
+});
+console.log(arr2);
+```
+
+
+
+> spread perator
+
+뒤에 위치한 배열 값을 그대로 꺼내서 현재 배열에 복사하는 것
+
+```
+const numbers = [1,2,3,4,5]
+const moreNumbers = [...nubmbers,6];//1,2,3,4,5,6
+```
+
+
 
