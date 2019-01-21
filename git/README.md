@@ -57,7 +57,7 @@ gistory
 
 ![add(1)](./assets/add(2).PNG)
 
-- git add f1.txt f2.txt를 하면 .git 디렉토리 내에 **index ** 파일과   **./objects**   디렉터리가 생성됩니다.
+- git add f1.txt f2.txt를 하면 .git 디렉토리 내에 **index** 파일과   **./objects**   디렉터리가 생성됩니다.
 
 - **./objects** 디렉터리 내에 생긴 각각 파일은 f1.txt f2.txt 파일을 의미합니다. 또한, 그 파일의 내용은
 
@@ -126,7 +126,7 @@ git add f1.txt
 git commit -m 2
 ```
 
-![commit(4)](D:./assets/commit(4).PNG)
+![commit(4)](./assets/commit(4).PNG)
 
 - objects 파일의 종류
   1. 파일의 내용을 담고 있는 파일(blob)
