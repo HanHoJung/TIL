@@ -159,3 +159,199 @@ git commit -m 2
 
 
 
+
+
+
+
+## git의 혁신-branch
+
+### branch 만들기
+
+> branch
+
+**브랜치의 목록을 볼 때**
+
+`git branch`
+
+**브랜치를 생성할 때** 
+
+`git branch "새로운 브랜치 이름"`
+
+**브랜치를 삭제할 때**
+
+`git branch -d "브랜치 이름" `
+
+**병합하지 않은 브랜치를 강제 삭제할 때** 
+
+`git branch -D "브랜치 이름"` 
+
+**브랜치를 전환(체크아웃)할 때**
+
+`git checkout "전환하려는 브랜치 이름"`
+
+**브랜치를 생성하고 전환까지 할 때** 
+
+`git checkout -b "생성하고 전환할 브랜치 이름"`
+
+
+
+
+
+### branch 정보확인
+
+> branch 비교
+
+**브랜치 간에 비교할 때**
+
+`git log "비교할 브랜치 명 1".."비교할 브랜치 명 2"`
+
+```bash
+git log master..exp
+//master에는 없고 exp에 있는것만 보여줌
+
+git log exp..master
+//exp 없고 master에 있는것만 보여줌
+```
+
+`git log -p "비교할 브랜치 명 1".."비교할 브랜치 명 2"  `(소스코드 까지 보여줌)
+
+
+
+**브랜치 간의 코드를 비교 할 때** 
+
+`git diff "비교할 브랜치 명 1".."비교할 브랜치 명 2"`
+
+```bash
+git diff mater..exp
+//exp에 있는것은 +로 표시 없는것은 -로 표시
+
+git diff exp..master
+//master에 있는것은 +로 표시 없는것은 -로 표시
+```
+
+
+
+**로그에 모든 브랜치를 표시하고, 그래프로 표현하고, 브랜치 명을 표시하고, 한줄로 표시할 때** 
+
+`git log --branches --graph --decorate --oneline`
+
+
+
+### branch 병합
+
+> branch 병합
+
+ **A 브랜치로 B 브랜치를 병합할 때 (A ← B)**
+
+`git checkout A`
+
+`git merge B`
+
+
+
+
+
+### branch 수련
+
+> fast forward
+
+ A 브랜치에서 다른 B 브랜치를 Merge 할 때 B 브랜치가 A 브랜치 이후(B브랜치가 앞 서 있는 상황)의 커밋을 가리키고 있으면 그저 A 브랜치가 B 브랜치와 동일한 커밋을 가리키도록 이동시킬 뿐이다.
+
+별도의 commit을 생성하지 않음
+
+
+
+> merge commit
+
+공통인 부모가 다르면 fast commit을 할 수 없습니다. 이 때는 merge commit을 하게 됩니다.
+
+Git은 각 브랜치(master,iss53)가 가리키는 공통 조상 commit을 찾고 이를 이용하여 3-way Merge를 수행 합니다.
+
+3-way Merge의 결과로 별도의 커밋을 만들고나서 해당 브랜치(병합의 주체.여기서는 master)가 그 commit을 가리키도록 이동 합니다. 이렇게 병합된 commit은 부모가 여러개고 Merge commit이라고 부릅니다.
+
+cf)
+
+fast forward은 commit을 생성하지 않음 
+
+
+
+![merge](./assets/merge(1).PNG)
+
+![merge](./assets/merge(2).PNG)
+
+![merge](./assets/merge(3).PNG)
+
+![merge](./assets/emerge(4).PNG)
+
+![merge](./assets/merge(5).PNG)
+
+![](https://git-scm.com/book/en/v2/images/basic-merging-1.png)
+
+![](https://git-scm.com/book/en/v2/images/basic-merging-2.png)
+
+https://git-scm.com/book/ko/v2/Git-%EB%B8%8C%EB%9E%9C%EC%B9%98-%EB%B8%8C%EB%9E%9C%EC%B9%98%EC%99%80-Merge-%EC%9D%98-%EA%B8%B0%EC%B4%88
+
+
+
+### branch 병합 시 충돌해결
+
+> conflict
+
+자동으로 합칠 수 없는 경우에는 conflict 해결을 사용자가 직접 해주어야 한다.
+
+![](./assets/conflict.PNG)
+
+![conflict2](./assets/conflict2.PNG)
+
+cf)
+
+'<<<<<<< HEAD' 부터 '======='  사이의 구간이 현재 checkout된 브랜치의 파일의 내용이고 '=======' 부터 '>>>>>>> exp'  구간이 병합하려는 대상인 exp 브랜치 파일의 코드 내용 입니다.
+
+
+
+## stash
+
+> stash
+
+다른 branch로 checkout 해야 하는데 아직 현재 브랜치의 작업이 끝나지 않은 경우 commit 하기가 애매 합니다.
+
+이러한 경우 stash를 이용하면 작업중이던 파일을 임시로 저장해둘 수 있습니다. 그 후 다른 branch로 이동하고 작업을 끝낸 후에 원래 branch로 복귀한 후에 이전에 작업한 내용을 stash를 통해 복구할 수 있습니다.
+
+- stash는 stack처럼 최근에 stash한 내용을 저장한다.(stack자료구조)
+
+- stash는 working copy(즉, 한 번이라도 add한 파일)에 한 번이라도 올라온 파일만 저장한다.
+
+- git stash를 적용하면 우리가 작업한 내용을 숨길 수 있음
+
+  
+
+**stash 수행**
+
+`git stash` 또는 `git stash --save`
+
+
+
+**stash 목록**
+
+`git stash list`
+
+
+
+**stash 적용**
+
+`git stash apply`
+
+
+
+**stash 삭제**
+
+`git stash drop`
+
+
+
+**stash 적용하고 삭제**
+
+`git stash pop`//git stash apply; git stash drop;
+
+
+
