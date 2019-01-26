@@ -558,17 +558,188 @@ int main(void) {
 
 
 
+### 퀵정렬
+
+> 정의
 
 
 
+방법
+
+- 임의의 pivot을 중심으로 전체 원소들을 왼쪽 부분집합과 오른쪽 부분 집합으로 분할(Divide) 한다.
+
+- 한 배열에서 왼쪽 부분 집합에는 pivot보다 작은 값을 오른쪽에는 pivot 보다 큰 값을 이동 시킨다.
+
+  - left 정렬 대상의 가장 왼쪽 index를 가르키는 변수
+  - right 정렬 대상의 가장 오른쪽 index를 가르키는 변수
+  - low는 pivot을 제외한 가장 왼쪽에 위치한 index를 가르키는 변수
+  - high는 pivot을 제외한 가장 오른쪽에 위치한 index를 가르키는 변수
+
+  
+
+- low의 오른쪽 방향 이동
+
+  - 피벗보다 큰 값을 만날때 까지
+  - pivot 보다 정렬의 우선순위가 낮은 데이터를 만날때 까지
+
+- high의 왼쪽 방향 이동
+
+  - 피벗보다 작은 값을 만날때까지
+  - pivot보다 정렬의 우선순위가 높은 데이터를 만날때 까지
+
+```
+arr[low]>=arr[pivot] 크거나 같다
+arr[high]<=arr[pivot] 작거나 같다와 같이 코드를 작성하지 않은 이유는 
+예를 들어 3,3,3,3 중복되는 데이터가 존재할 때 low와 high 값이 증가하지 않게
+되어서 무한 루프가 발생하기 때문입니다.
+```
+
+- 테스팅 값
+
+  2 1 3 4 5 9 7 6 8
+
+  ```
+  5 1 3 4   2   9  7 6 8
+          high  low
+          
+  2 1 3 4   5   9  7 6 8
+          high  low       
+          
+  피벗인 5와 2를 변경해줌으로 5를 기준으로 왼쪽에는 작은값 오른쪽에는 큰 값이 정렬되어진다.
+  따라서 마지막에 pivot값과 high값을 바꾸는 이유이다.
+  ```
+
+  
+
+  
+
+> 시간복잡도
+
+pivot이 항상 중간 값으로 결정되는 이상적인 상황을 가정해보자
+
+총 31개의 데이터를 대상으로 퀵 정렬을 수행해보자
+
+- 31개의데이터를 15개씩 둘로 나누어 총 2조각이 된다.(1회)
+- 15개의 데이터를 7개씩 둘로  나누어 총 4조각이 된다.(2회)
+- 7개의 데이터를 3개씩 둘로  나누어 총 8조각이 된다.(3회)
+- 3개의 데이터를 1개씩 둘로 나누어 총 16조각이 된다.(4회)
+
+수행 횟수를 k라 하고 데이터 수를 n이라고 할때
+
+k = logn(밑이 2)
+
+각 회수마다 n번의 정렬이 필요함으로 
+
+시간복잡도는 O(n * logn) 입니다.
 
 
 
+위와 같은 경우는 평균적인 시간 복잡도 입니다.
+
+최악의 경우를 가정해봅시다. 
+
+1 2 3 4 5 6 이라는 배열이 있을때
+
+1회 수행시 1개 5개로 나눔
+
+2회 수행시 1개 4개로 나눔
+
+3회 수행시 1개 3개로 나눔
+
+4회 수행시 1개 2개로 나눔
+
+...
+
+n-1회 수행시 1개 1개로 나눔
+
+수행횟수 n-1 각 횟수마다 n번의 정렬이 필요함으로 
+
+시간복잡도는 O(n<sup>2</sup>) 이 도출됩니다.
+
+```
+
+```
 
 
 
+```c++
+//내림차순
+
+#include <iostream>
+#include <vector>
+using namespace std;
+int partition(vector<int> & arr, int left, int right);
+
+void quickSort(vector<int> &arr, int left, int right) {
+	if (left <= right) {
+		int pivot = partition(arr, left, right);
+		quickSort(arr, left, pivot - 1);
+		quickSort(arr, pivot + 1, right);
+	}
+
+}
 
 
+int partition(vector<int> & arr,int left, int right) {
+
+	int pivot = arr[left];
+	
+	int low = left + 1;
+	int high = right;
+
+	
+
+	while (low <= high) {
+		
+		while (low <= right && arr[low] >= pivot )
+			low++;
+
+
+		while (high >= (left + 1) && arr[high] <= pivot)
+			high--;
+
+		
+
+		if (low <= high) {
+			int temp = arr[low];
+			arr[low] = arr[high];
+			arr[high] = temp;
+			
+		}
+
+	}
+
+	int temp = arr[left];
+	arr[left] = arr[high];
+	arr[high] = temp;
+
+	
+	return high;
+
+
+
+}
+
+
+int main(void) {
+	int n;
+	cin >> n;
+	vector<int> arr(n);
+
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+	}
+	
+
+	quickSort(arr, 0, n-1);
+
+	for (int i = 0; i < n; i++) {
+		cout<< arr[i]<<"\n";
+	}
+
+	
+}
+```
 
 
 
