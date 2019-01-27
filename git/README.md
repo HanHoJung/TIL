@@ -6,7 +6,7 @@
 
 
 
-## git의 원리
+## git의 원리(Add,Commit,Status)
 
 해당 공부는 git이 내부적으로 어떻게 동작하는지 알아보기 위한 학습 입니다.
 
@@ -163,7 +163,7 @@ git commit -m 2
 
 
 
-## git의 혁신-branch
+## git의 원리(branch)
 
 ### branch 만들기
 
@@ -354,4 +354,242 @@ cf)
 `git stash pop`//git stash apply; git stash drop;
 
 
+
+
+
+## git의 원리(branch2)
+
+> branch
+
+이번 chapter에서는 branch의 동작 원리에 대하여 알아보도록 하겠습니다.
+
+```bash
+git init
+```
+
+![](./assets/branch(1).PNG)
+
+- git init을 하게 되면 HEAD라는 텍스트 파일이 생성 됩니다.
+- HEAD라는 텍스트 파일의 내용은 **ref:refs/heads/master** 라는 내용이 적혀있습니다.
+
+
+
+```bash
+vim f1.txt
+git add f1.txt
+```
+
+![](./assets/branch(1).PNG)
+
+- 파일 하나를 만들고 add 명령을 통해 추적을 해도 HEAD 파일의 내용은 변하지 않습니다.
+
+```bash
+git commit f1.txt -m "1"
+```
+
+![](./assets/branch(2).PNG)
+
+- commit을 한 시점부터 refs/heads/master 파일이 생성 됩니다.
+- refs/heads/master 파일은 최신 commit의 object id를 가르키고 있습니다.
+  - commit 파일과 commit 파일 안에 object(tree)파일 또 그 안을 들어가 object(blob )파일을 통해 우리는 현재 시점의 파일의 상태를 알아볼 수 있습니다.
+
+```bash
+vim f2.txt
+git add f2.txt
+git commit f2.txt -m '2'
+```
+
+![](./assets/branch(3).PNG)
+
+- commit을 수행한 순간 refs/heads/master 파일의 내용은 최신 commit을 가르키고 있습니다. 이로서 우리는 ref:refs/heads/master라는 파일은 항상 최신 commit의 object id를 가르킴을 알 수 있습니다.
+
+```bash
+git branch exp
+git checkout exp
+```
+
+![](./assets/branch(4).PNG)
+
+- branch를 수행하면 refs/heads/exp라는 파일이 생성됩니다.
+
+- git checkout을 수행하면 HEAD 파일이 refs/heads/exp를 가르킴니다.
+
+- 이로서 우리가 checkout을 할 때에 파일이 내용이 바뀌는 원리에 대해 추측해 볼 수 있습니다.
+
+  HEAD라는 파일을 통해 해당 branch가 변경되고 각각 branch들이 가지고 있는 refs/heads/브랜치명
+
+  파일이 가리키는 commit 파일을 통하여 우리는 그 시점(snap shot)의 파일의 상태를 알 수 있습니다.
+
+- 더불어, .git/refs/heads/exp를 지우면 exp라는 branch가 삭제 됩니다.
+
+  반대로 .git/refs/heads/exp를 생성하고 commit object id를 저장하면 branch가 생성됩니다.
+
+
+
+> reset과 checkout
+
+이전 commit으로 돌아가고 싶을 때는 `reset` 이라는 명령어를 사용하면 과거로 돌아갈 수 있습니다.
+
+<명령어>
+
+`git reset --hard "commit object id" `
+
+예를 들어서 상황을 설명해보도록 하겠습니다. 현재 4개의 commit을 수행한 상태입니다. 이 상태에서 2번 commit의 상태로 돌아가보도록 하겠습니다.
+
+![](./assets/branch(5).PNG)
+
+```bash
+git reset --hard 43e8787ae3c9bafe91b7888e7b7492886b736d03
+```
+
+![](./assets/branch(6).PNG)
+
+- refs/heads/master라는 파일은 4번 commit object id에서 2번 commit의 object id를 가르키고 있습니다.
+
+- 이렇게 reset 명령어는 해당 branch의 refs/heads/master의 내용을 변경하여 이전의 상태로 돌아가게 됩니다.
+
+- 또한, reset을 하더라도 4번 log는 삭제되지 않습니다.
+
+- ORIG_HEAD 파일과  .\logs\refs\heads\브랜치명 파일에는 우리가 명령을 수행했던 log들이 남아 있습니다.
+
+  - ORIG_HEAD
+
+    ```bash
+    위험한 명령(정보를 제거할만한 명령 )을 수행하기 전에 ORIG_HEAD 파일 내에 현재 checkout branch가 가리키는 최신 commit id를 기록한다음에 reset 명령을 수행합니다.
+    
+    git reset --hard ORIG_HEAD //reset 이전 상태로 돌아갈 수 있습니다.
+    ```
+
+  - .\logs\refs\heads\브랜치
+
+    ```bash
+    checkout branch에서 했었던 명령들에 대한 기록들이 저장되어 있습니다.
+    
+    git reflog //이 명령어를 통해 ./logs/refs/브랜치 log 파일의 정보를 볼 수 있습니다.
+    git reset HEAD@{1} //해당 상태로 돌아갈 수 있다.
+    ```
+
+    
+
+![](./assets/branch(7).PNG)
+
+
+
+- checkout commit id를 통하여 특정 commit 을 가리키는 detached  상태로 돌아갈 수 있다.
+
+  이렇게 전환 branch는 HEAD 파일이 특정 commit을 가르킴(branch의 경우 refs/heads/브랜치를 가르킴)
+
+  (실제 브랜치는 아님)
+
+  ```bash
+  git checkout "commit id"
+  ```
+
+  ![](./assets/branch(8).PNG)
+
+
+
+
+
+> reset
+
+- git reset에는 다양한 옵션이 존재합니다.(soft, mixed, hard)
+- hard는(working directory, index, repository의 내용이 모두 삭제)
+- mixed(index, repository의 내용이 모두 삭제)
+- soft(repository 내용만 삭제)
+
+![img](https://s3-ap-northeast-2.amazonaws.com/opentutorials-user-file/module/2676/5131.png)
+
+
+
+> merge & conflict
+
+```bash
+1번 commit(master branch)
+f1.txt
+function(){
+    return 'common'
+}
+
+2번 commit(exp branch)
+f1.txt
+function(){
+    return 'exp'
+}
+
+3번 commit(master branch)
+function(){
+    return 'master'
+}
+
+git merge exp 
+충돌이 발생
+```
+
+![](./assets/branch(9).PNG)
+
+- conflict가 발생한 상황에서  index 파일에 번호가 붙게 된다.
+
+  - 1번으로 적힌 파일은 master와 exp 공통인 조상의 파일의 내용이다.
+
+    ```c
+    function(){
+        return 'common'
+    }
+    ```
+
+  - 2번으로 적힌 파일은 exp 파일의 내용이다.
+
+    ```c
+    function(){
+        return 'exp'
+    }
+    ```
+
+  - 3번으로 적힌 파일 master 파일의 내용이다.
+
+    ```c
+    function(){
+        return 'master'
+    }
+    ```
+
+    
+
+- ORIG_HEAD 파일도 병합은 위험한 작업이니 현재 commit object id를 저장하고 병합작업을 수행한다.
+
+- MERGE_HEAD 파일은 merge가 될 브랜치의 최신 commit을 가리킨다.(여기서는 exp branch의 commit)
+
+- 충돌 파일의 내용을 가리키는 object(blob) 파일도 생성된다.
+
+- git mergetool 명령어를 통해 충돌부분을 해결할 수 있습니다.
+
+  ![](./assets/branch(10).PNG)
+
+
+
+
+
+> 3way-merge
+
+- BASE는 ME와 Other의 공통의 조상
+
+- 2way merge 방식은 Base는 보지않고 Me와 Other를 비교해서 병합하는 방식 입니다.
+- 3way merge는 Base 참고하여 Me, Other를 비교해서 병합하는 방식 입니다.
+  - 3way는 Me, Base, Other이 모두 다를때만 conflict 발생
+
+![img](https://s3-ap-northeast-2.amazonaws.com/opentutorials-user-file/module/2676/5133.png)
+
+
+
+```
+3way merge에서, ME에서 OTHER로 병합할 때
+ME  BASE OTHER
+A     A
+결과는 빈칸이다. ME는 BASE로 부터 파일을 수정하지 않았고 Other는 수정했으므로 다른 사람이 채택된것이 채택된다.
+
+ME  BASE OTHER
+     D     D
+결과는 빈칸이다. ME만 원래에서 바겼기 때문입니다.     
+```
 
