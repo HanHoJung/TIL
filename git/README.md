@@ -237,6 +237,12 @@ git diff exp..master
 
 
 
+**로그를 거꾸로 출력하기**
+
+`git log --reverse`
+
+
+
 ### branch 병합
 
 > branch 병합
@@ -593,3 +599,154 @@ ME  BASE OTHER
 결과는 빈칸이다. ME만 원래에서 바겼기 때문입니다.     
 ```
 
+
+
+
+
+## git의 원리(원격 저장소)
+
+**commit 메시지 수정**
+
+`git commit --amend`
+
+**원격 저장소 등록하기**
+
+` git remote add "원격저장소이름" <원격저장주소> `
+
+**원격 저장소 보기**
+
+`git remote`
+
+**원격 저장소 자세히 보기**
+
+`git remote -v`
+
+**원격 저장소 삭제**
+
+`git remote remove "원격저장소이름"`
+
+**원격 저장소 동기화**
+
+`git push -u "원격저장소이름" master`//처음 push 할 때만 u옵션을 줍니다.
+
+
+
+> 원격저장소의 원리
+
+```bash
+git init
+vim f1.txt
+git add f1.txt
+git commit -m "1"
+git remote add "원격저장소이름" "원격저장주소"
+
+```
+
+![](./assets/remote.PNG)
+
+- remote add 명령어로 했을때 ./git/config 파일에 url, fetch 내용이 추가 됩니다.
+- url: 원격 저장소의 주소를 의미 합니다.
+
+
+
+```bash
+git push
+```
+
+![](./assets/remote2.PNG)
+
+- 이 메시지는 우리의 지역 저장소의 branch와 원격저장소의 branch가 서로 연결되어 있지 않음을 나타냅니다.
+- upstream은 원격저장소의 의미 입니다.
+- 이를 해결하기 위해서는 `git push --set-upstream "원격저장소이름" "지역저장소이름"  ` 해당 명령어를 입력해야 합니다.
+
+
+
+```bash
+git push --set-upstream origin master
+```
+
+- 이 작업은 원격저장소의 master branch와 지역저장소의 master branch를 연결시키는 작업을 수행 합니다.
+- 더불어, 업로드 하는 작업까지 수행 합니다.
+- 이 명령을 수행한 결과 .\refs\remotes\origin\master라는 파일이 생기고 그 파일 내용은 최신 commit을 가리키고 있습니다.
+- 더불어 confing 파일에 master의 remote branch는 origin이라는 정보와 merge대상이 refs/heads/master라는 정보가 추가 됩니다.
+
+![](./assets/remote3.PNG)
+
+
+
+![](./assets/remote4.PNG)
+
+
+
+> pull과 fetch의 차이점
+
+`git pull` 원격 저장소로 부터 필요한 파일을 다운 받고 병합을 수행한다.
+
+`git fetch` 원격 저장소로부터 필요한 파일을 다운만 받음 병합 작업은 수행하지 않는다.
+
+ git pull = git fetch && git merge origin/master
+
+
+
+## git의 원리(Tag)
+
+> Tag
+
+git에서의 태그는 특정한 commit 버전을 가리키는 기능을 가집니다. 보통, release 할 때 그 시점의 commit을 가리키기 위해 Tag를 사용 합니다. branch와 비슷하지만 branch는 항상 최신 commit을 가리키는 상태로 변하고 tag는 고정되어 있습니다. 다만 내부적인 매카니즘은 동일 합니다.
+
+Tag의 종류에는 두 가지가 있습니다.
+
+- light weight tag
+- annotated tag//자세한 정보를 담고있는 태그
+
+**태그 목록 보기**
+
+`git tag`
+
+**태그 생성 (light weight tag)**
+
+`git tag "태그 이름" [태그가 가르킬 버전의 커밋 아이디]`
+
+**태그 생성 (annotated tag)**
+
+`git tag -a "태그 이름" -m "태그에 대한 설명" [태그가 가르킬 버전의 커밋 아이디]`
+
+**태그 삭제**
+
+`git tag -d "삭제할 태그명"`
+
+**태그 원격 저장소로 업로드**
+
+`git push --tags` //원격 저장소로 tag를 올릴려면 반드시 이 명령이 필요하다.
+
+**annotated tag 자세히 보기**
+
+`git tag -v "annotated tag명"`
+
+**해당 tag로 checkout**
+
+`git checkout "tag명"`
+
+
+
+`<light weight tag>`
+
+```bash
+git tag 1.1
+```
+
+![](./assets/tag.PNG)
+
+- refs\tags\1.1 파일이 생성되고 그 시점의 commit을 가리키고 있습니다.
+
+
+
+`<annotated tag>`
+
+```
+git tag -a 1.2 -m 'bug fix'
+```
+
+![](./assets/tag2.PNG)
+
+- light weight tag와 달리 annotated 태그는 태그 요약 정보에 대한 blob(tag) 파일이 생깁니다.
