@@ -1,4 +1,4 @@
-# Chapter06 정렬(Sorting)
+# 정렬(sorting)
 
 [TOC]
 
