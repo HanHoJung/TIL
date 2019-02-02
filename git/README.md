@@ -750,3 +750,70 @@ git tag -a 1.2 -m 'bug fix'
 ![](./assets/tag2.PNG)
 
 - light weight tag와 달리 annotated 태그는 태그 요약 정보에 대한 blob(tag) 파일이 생깁니다.
+
+
+
+
+
+## git의 원리(Rebase)
+
+merge와 rebase는 서로 다른 branch가 **하나의 branch**로 변화를 통합하기 위해서 사용됩니다.
+
+그러나 서로 다른 방식을 가지고 있습니다.
+
+![img](https://cdn-images-1.medium.com/max/1600/1*pzT4KMiZDOFsMOKH-cJjfQ.png)
+
+<feature branch에서 master를 합치는 상황>
+
+-  merge의 경우 **<u>master와 feature의 base</u>**와 **<u>feature의 최신 commit</u>** **<u>master 최신 commit</u>**을 
+
+   3way-merge 방식을 이용한 결합된 결과를 가르키게 됩니다.
+
+- rebase의 경우 master branch의 최신 commit에서 feature 내용을 하나씩 가져와서 병합하는 방식 입니다.
+
+  - feature branch는 master branch의 최신 commit으로 checkout 되고  feature의 base의 이후의 
+
+    작업들은 임시 저장 공간에 저장됩니다(안에 저장된 요소 하나하나를 fetch라 부릅니다.)
+
+    또한, feature base가 master branch의 최신 commit으로 변경 됩니다.
+
+  - 그 후 master branch의 최신 commit에서(feature의 현재 base) fetch 요소를 하나씩 가지고 오면서 병합을 하고 그때마다 feature branch는 이동하게 됩니다.
+
+=>rebase의 장점은 history를 보기에 편한 방식 입니다.(merge는 history가 병렬로 진행되어서 파악하기 어렵습니다.)
+
+
+
+## git의 원리(git flow)
+
+- git flow란 버전관리를 효율적으로 하기 위한 방식을 의미한다. git flow 외에 github flow, gitlab flow 등의 방식이 존재합니다.
+
+![](https://s3-ap-northeast-2.amazonaws.com/opentutorials-user-file/module/2676/5263.png)
+
+
+
+우선, git flow의 branch는 5가지로 구성됩니다.
+
+- feature
+  - 새로운 기능을 추가할 때 사용되는 브랜치 입니다
+  - develop branch에서 파생됩니다.
+  - feature branch는 각각 개발자의 repository에만 존재하고 원격 저장소인 origin에 반영되서는 안됩니다.
+  - 기능을 완성할 때마다 develop에 merge 또는 rebase 작업을 수행합니다.
+
+
+
+- develop
+  - 개발에 적용되는 branch
+- release
+  - 사용자에게 결과를 배포하는 시점(다운로드를 받게하는 순간, 웹 서버에 반영되는 순간 등)에 develop에서 새로운 branch를 만듭니다.
+  - release 이후에 발생하는 bug 수정이나 문서를 업데이트 할때에는 release branch 안에서 작업을 수행 합니다.
+  - 테스트까지 마치면 master branch와 develop에 병합을 수행합니다. 이때, master branch에서는 release 시점에서 tag를 통하여 기록을 남깁니다.
+- hotfix
+  - 사용자에게 버전을 제공하는데 긴급하게 버그가 발생한 경우에 master에서 파생되는 branch입니다. 긴급하게 문제를 해결한다음에 master와develop에 병합을 한다음에 master의 version을 tag로 남깁니다.
+- master
+
+
+
+(참조)
+
+https://ujuc.github.io/2015/12/16/git-flow-github-flow-gitlab-flow/
+
