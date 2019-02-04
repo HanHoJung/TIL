@@ -9,6 +9,10 @@
 > 1.4 Map
 >
 > 1.5 Slice, Filter, spread operator
+>
+> 1.6 Join()
+>
+> 1.7 Tagged Template Literals
 
 
 
@@ -224,4 +228,52 @@ const moreNumbers = [...nubmbers,6];//1,2,3,4,5,6
 ```
 
 
+
+### 1.6 join
+
+> join 함수
+
+배열의 원소들을 연결하여 하나의 값으로 만듭니다.
+
+배열에 있는 원소들을 하나의 값으로 만듭니다. 
+
+- 원소들의 구분은 기본적으로 콤마(,)로 합니다.
+- 원소들의 구분을 다른 문자로 하려면 () 안에 원하는 문자를 넣습니다.
+
+```javascript
+var a = ['lion','tiger']
+console.log(a.join()) //lion,tiger
+console.log(a.join('/')) //lion/tiger
+
+```
+
+
+
+
+
+cf)
+
+```java
+import Button from './Button';
+export default Button;
+```
+
+```javascript
+ export { default } from './Button';
+```
+
+
+
+### 1.7 Tagged Template Literals
+
+> Tagged Template Literals
+
+- backquote(`) 사이에 ${자바스크립 표현}이 들어가면 아래처럼 끊어서 함수 인자로 전달 됩니다.
+
+```javascript
+function myFunction(...args) {
+   console.log(args);
+}
+myFunction`1+1 = ${1+1} and 2+2 = ${2+2}!`
+```
 
