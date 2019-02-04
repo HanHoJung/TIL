@@ -656,9 +656,7 @@ n-1회 수행시 1개 1개로 나눔
 
 시간복잡도는 O(n<sup>2</sup>) 이 도출됩니다.
 
-```
 
-```
 
 
 
@@ -681,13 +679,9 @@ void quickSort(vector<int> &arr, int left, int right) {
 
 
 int partition(vector<int> & arr,int left, int right) {
-
-	int pivot = arr[left];
-	
+	int pivot = arr[left];	
 	int low = left + 1;
 	int high = right;
-
-	
 
 	while (low <= high) {
 		
@@ -697,8 +691,6 @@ int partition(vector<int> & arr,int left, int right) {
 
 		while (high >= (left + 1) && arr[high] <= pivot)
 			high--;
-
-		
 
 		if (low <= high) {
 			int temp = arr[low];
@@ -712,12 +704,7 @@ int partition(vector<int> & arr,int left, int right) {
 	int temp = arr[left];
 	arr[left] = arr[high];
 	arr[high] = temp;
-
-	
 	return high;
-
-
-
 }
 
 
@@ -744,4 +731,148 @@ int main(void) {
 
 
 
+
+### 병합정렬
+
+> 정의
+
+- 병합정렬은 분할 정복(Divide and Conquer) 알고리즘 디자인 기법에 근거하여 만들어진 알고리즘 이다.
+- 배열을 요소가 하나가 될 때까지 쪼개고(Divide)
+- 각 단계에 대하여 해결할 수 있는 부분까지 정렬을 마치고(Conquer) 결합(Combine) 하는 방식을 통해 정렬된 결과를 얻을 수 있다.
+
+
+
+![](https://t1.daumcdn.net/cfile/tistory/9940F5435B6D28320B)
+
+> 시간복잡도
+
+데이터가 n일때 분할의 과정이 `log n` 이 도출된다. 각 단계마다 combine하는 시간복잡도가 n이므로 
+
+O(nlogn)이 도출된다.
+
+```c++
+#include <iostream>
+#include <vector>
+using namespace std;
+//오름차순
+void combine(vector<int> &arr, int left, int mid, int right) {
+	int k = 0;
+	vector<int> brr(right-left+1);
+
+	int L = left;
+	int R = mid + 1;
+	while (L <= mid && R <= right) {
+
+		if (arr[L] >= arr[R]) {
+			brr[k++] = arr[R];
+			R++;
+		}else if(arr[L] < arr[R]) {
+			brr[k++] = arr[L];
+			L++;
+		}
+
+	}
+	
+	if (L > mid) {//배열의 앞 쪽은 모두 정렬이 완료된 상태
+		for (int i = R; i <=right; i++) {//배열의 뒤 쪽 정렬
+			brr[k++] = arr[i];
+		}
+	}
+	
+	if (R > right) {//배열의 뒤쪽은 모두 정렬이 완려된 상태
+		for (int i = L; i <=mid; i++) {//배열의 뒤 쪽 정렬
+			brr[k++] = arr[i];
+		}
+	}
+
+	k = 0;
+
+	
+	
+	for (int i = left; i <= right; i++) {
+		arr[i] = brr[k++];
+	}
+
+
+
+}
+
+
+//내림차순
+void combine2(vector<int> &arr, int left, int mid, int right) {
+	int k = 0;
+	vector<int> brr(right - left + 1);
+
+	int L = left;
+	int R = mid + 1;
+	while (L <= mid && R <= right) {
+
+		if (arr[L] >= arr[R]) {
+			brr[k++] = arr[L];
+			L++;
+			
+		}
+		else if (arr[L] < arr[R]) {
+			brr[k++] = arr[R];
+			R++;
+		}
+
+	}
+
+	if (L > mid) {
+		for (int i = R; i <= right; i++) {
+			brr[k++] = arr[i];
+		}
+	}
+
+	if (R > right) {
+		for (int i = L; i <= mid; i++) {
+			brr[k++] = arr[i];
+		}
+	}
+
+	k = 0;
+
+
+
+	for (int i = left; i <= right; i++) {
+		arr[i] = brr[k++];
+	}
+
+
+
+}
+
+void divide(vector<int> &arr, int left, int right) {
+	int mid;
+	if (left < right) {//left가 작다는 것은 더 작게 쪼갤 수 있음을 의미함
+		mid = (left + right) / 2;
+		
+		divide(arr, left, mid);//left~mid까지 데이터 정렬
+		divide(arr, mid + 1, right);//mid+1~right까지 데이터 정렬
+
+		combine(arr, left, mid, right);
+
+
+	}
+
+
+}
+
+int main(void) {
+
+	vector<int> arr = { 8,2,3,7,1,5,4,6};
+	int n = arr.size();
+
+	divide(arr, 0, n-1);
+	
+	for (int i = 0; i < arr.size(); i++) {
+		cout << arr[i] << " ";
+	}
+
+	cout << "\n";
+
+	
+}
+```
 
