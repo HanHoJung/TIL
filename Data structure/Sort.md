@@ -876,3 +876,126 @@ int main(void) {
 }
 ```
 
+
+
+
+
+
+
+### 기수 정렬(Radix Sort)
+
+> 기수 정렬
+
+- 기수 정렬은 정렬할려는 수 에 대해서 앞서고 뒤섬을 비교하지 않습니다.
+
+  ```
+  기수(radix)란 주어진 데이터를 구성하는 기본 요소를 뜻합니다.
+  -10진수
+    기수:0부터 9까지 수
+  -2진수
+    기수:0부터 1까지 수
+     
+  ```
+
+- 기수 정렬은 기수의 개수만큼 버킷이 필요합니다.
+
+- 길이가 같은 데이터들을 대상으로는 정렬이 가능하지만, 길이가 같지 않는 데이터를 대상으로는 정렬이 불가능 합니다.
+
+  ```
+  - 1,7,9,5,2,6(정렬 가능)
+  - 12,98,20,30,101(정렬 불가능)
+  - red, why, zoo, box(정렬 가능)
+  - professional, doctor, simple(정렬 불가능)
+  
+  그러나, 정렬의 대상 및 기준에 따라서 특정 알고리즘을 적용하면 길이가 같지 않는 데이터도 정렬할 수 있습니다. 하지만 가능한 경우가 매우 제한적 입니다.
+  ```
+
+![img](https://player.slidesplayer.org/90/14647376/slides/slide_31.jpg)
+
+
+
+> 기수정렬의 종류
+
+- LSD(Least Significant Digit)
+  - 덜 중요한 자릿수 부터 정렬을 하는 방식(수의 마지막 자리 수 부터 시작해서 정렬)
+
+![img](https://player.slidesplayer.org/90/14647376/slides/slide_32.jpg)
+
+- MSD(Most Significant Digit)
+
+  - 가장 큰 자릿수에서부터 정렬하는 방식(수의 첫째 자리 수 부터 시작해서 정렬)
+
+  - LSD의 방식의 반대로 하게되면 올바른 결과가 나오지 않습니다.
+
+    ![img](https://player.slidesplayer.org/90/14647376/slides/slide_33.jpg)
+
+    =>따라서, MSD는 중간에 데이터를 검사해야 합니다. 
+
+> 시간복잡도
+
+- 시간 복잡도는 데이터의 최대길이(maxLen) * 원소의 개수(n) = O(maxLan*n) = O(n)
+- 데이터 삽입과 데이터 추출을 하나의 연산으로 바라봄
+
+```c++
+#include <iostream>
+#include <vector>
+#include <queue>
+#define BUCKET_SIZE 10
+using namespace std;
+
+void RadixSort(vector<int> &arr, int n, int maxLength) {
+	/*
+	  -10진수의 수를 만들기 때문에 Bucket은 10개가 필요합니다.
+	  1.배열에 저장된 원소에 대하여 마지막 수부터 비교합니다.
+	  2.그 후, 해당 버켓에 저장합니다.
+	  3.그것을 원래 배열 arr에 저장합니다.
+	  이 과정을 최대 자리 수만큼 반복
+	*/
+	queue<int> bucket[10];
+	
+	int radix;
+	int divfac = 1;
+
+	for (int digit = 0; digit < maxLength; digit++) {
+
+		for (int i = 0; i < n; i++) {//버킷에 데이터 삽입
+			radix = (arr[i] / divfac) % 10;
+			bucket[radix].push(arr[i]);
+
+		}
+
+		int k = 0;
+		for (int i = 0; i < BUCKET_SIZE; i++) {//버킷 데이터 추출
+			
+			while (!bucket[i].empty()) {
+				arr[k++] = bucket[i].front();
+				bucket[i].pop();
+			}
+		}
+
+		divfac = divfac * 10;
+
+	}
+
+}
+
+int main(void) {
+
+	int n;//배열의 개수
+	int maxLength;//수의 최대 길이
+	cin >>n>>maxLength;
+	vector<int> arr(n);
+	for (int i = 0; i < n; i++) {
+		cin >> arr[i];
+	}
+	
+	RadixSort(arr, n, maxLength);
+
+	for (auto num : arr) {
+		cout << num << " ";
+	}
+	cout<<"\n";
+
+}
+```
+
