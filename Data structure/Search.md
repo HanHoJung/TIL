@@ -135,6 +135,64 @@
 
 
 
+> Lower Bound
+
+- 탐색값 k에 대하여, k 이상이 처음 나오는 위치를 찾는 과정
+
+
+
+> Upper Bound
+
+- 탐색값 k에 대하여, k 를 초과한 값이 처음 나오는 위치를 찾는 과정
+
+  
+
+> 차이
+
+- 상한과 하한의 차를 이용하여 해당 수가 배열에 몇 개 있는지를 구할 수 있다.
+- 상한-하한
+
+```c++
+nt upper_bound(vector<long long> arr,int key) {
+	
+	int left = 0;
+	int right = arr.size() - 1;
+
+	while (left < right) {
+		int mid = (left + right) / 2;
+		if (arr[mid] <= key) {
+			left = mid + 1;
+		}
+		else if (arr[mid] > key) {
+			right = mid;
+		}
+
+	}
+	return left;
+}
+
+int lower_bound(vector<long long> arr, int key) {
+
+	int left = 0;
+	int right = arr.size() - 1;
+
+	while (left < right) {
+		int mid = (left + right) / 2;
+		if (arr[mid] >= key) {
+			right= mid;
+		}
+		else if (arr[mid] > key) {
+			left = mid + 1;
+		}
+
+	}
+
+	return left;
+}
+```
+
+https://chogahui05.blog.me/221235974287
+
 ### - 해시법
 
 
