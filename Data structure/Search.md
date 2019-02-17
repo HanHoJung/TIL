@@ -40,6 +40,9 @@
 
 ## 2. 검색 알고리즘
 
+- 정렬되지 않은 대상을 기반으로 하는 탐색(선형 검색)
+- 정렬된 대상을 기반으로 하는 탐색(이진 검색)
+
 ### - 선형 검색(Linear Search)
 
 정의:임의로 늘여놓은 배열에서 순차적으로 원하는 키 값을 찾는 알고리즘 입니다.
@@ -153,7 +156,7 @@
 - 상한-하한
 
 ```c++
-nt upper_bound(vector<long long> arr,int key) {
+int upper_bound(vector<long long> arr,int key) {
 	
 	int left = 0;
 	int right = arr.size() - 1;
@@ -193,10 +196,169 @@ int lower_bound(vector<long long> arr, int key) {
 
 https://chogahui05.blog.me/221235974287
 
+
+
+> 보간 탐색
+
+이진 검색은 찾는 대상이 중앙에 취하건 맨 앞에 위치하건 그 위치에 상관하지 않고 일관되게 반씩 줄여가며 탐색을 진행합니다. 때문에 찾는 대상의 위치에 따라서 탐색의 효율에 차이가 발생 합니다.  이를 보완한 알고리즘이 보간 탐색 입니다.
+
+원리는, 중앙에서 탐색을 시작하는게 아니라 탐색 대상이 앞쪽에 있으면 앞쪽에서 데이터를 찾고 뒤쪽에 있으면 뒤쪽 부터 찾는 알고리즘 입니다.(대상에 비례하여 탐색의 위치를 결정)
+
+
+
+<비례식 구성>
+
+- low:탐색 대상의 시작 index
+- high:탐색 대생의 마지막 index
+- s:찾는 대상에 저장된 index
+- x:arr[s]
+- 오차율을 최소하하기 위해 s의 자료형은 실수형
+- 보간탐색은 **데이터의 값**과 그 **데이터가 저장된 위치의 인덱스 값**이 비례한다고 가정
+
+![binary3](./img/search.PNG)
+
+```c++
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int Isearch(vector<int> &arr, int left, int right, int target) {
+	int mid;
+
+	if (left > right)
+		return -1; //-1은 탐색 실패
+
+	mid = ((double)(target - arr[left]) / (arr[right] - arr[left])*(right - left)) + left;
+	
+	if (arr[mid] == target)
+		return mid;
+
+	else if (target < arr[mid])
+		return Isearch(arr, left, mid - 1, target);
+	else
+		return Isearch(arr, mid + 1, right, target);
+
+}
+int main(void) {
+
+	vector<int> arr = { 1,3,5,7,9 };
+	int idx = Isearch(arr, 0, arr.size() - 1, 1);
+
+	if (idx == -1)
+		cout << "탐색 실패\n";
+	else
+		cout << idx << "\n";
+
+
+	idx = Isearch(arr, 0, arr.size() - 1, 11);
+
+	if (idx == -1)
+		cout << "탐색 실패\n";
+	else
+		cout << idx << "\n";
+
+
+
+	idx = Isearch(arr, 0, arr.size() - 1, 2);
+
+	if (idx == -1)
+		cout << "탐색 실패";
+	else
+		cout << idx << "\n";
+}
+
+```
+
+단순히  mid 값을 찾는 경우를 보간법으로 바꾼다고 해서 보간탐색이 성되는것이 아닙니다.
+
+예를 들어, Isearch(arr, 0, arr.size() - 1, 2); 호출한 경우 mid값이 계속 0이되어 Isarch(arr,1,4,2)가 계속 호출되는 경우가 발생하게 됩니다. 때문에 종료조건을 단순히 left>right 크다는 조건으로 해결할 수 없습니다.
+
+즉, **arr[target]<arr[left] 또는 arr[target]>arr[right]**인 경우
+
+이러한 결과가 발생하는 이유는 정렬된 탐색 대상의 범위를 좁혀가면서 정렬을 진행하기 때문 입니다.
+
+( first와 last가 target을 향해서 점점 좁혀감)
+
+```c++
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int Isearch(vector<int> &arr, int left, int right, int target) {
+	int mid;
+
+	if (arr[left] > target || target>arr[right])
+		return -1; //-1은 탐색 실패
+
+	mid = ((double)(target - arr[left]) / (arr[right] - arr[left])*(right - left)) + left;
+	
+	if (arr[mid] == target)
+		return mid;
+
+	else if (target < arr[mid])
+		return Isearch(arr, left, mid - 1, target);
+	else
+		return Isearch(arr, mid + 1, right, target);
+
+}
+
+int main(void) {
+
+	vector<int> arr = { 1,3,5,7,9 };
+	int idx = Isearch(arr, 0, arr.size() - 1, 1);
+
+	if (idx == -1)
+		cout << "탐색 실패\n";
+	else
+		cout << idx << "\n";
+
+
+	idx = Isearch(arr, 0, arr.size() - 1, 11);
+
+	if (idx == -1)
+		cout << "탐색 실패\n";
+	else
+		cout << idx << "\n";
+
+
+
+	idx = Isearch(arr, 0, arr.size() - 1, 2);
+
+	if (idx == -1)
+		cout << "탐색 실패";
+	else
+		cout << idx << "\n";
+}
+```
+
+
+
 ### - 해시법
 
 
 
+### - 이진 탐색 트리
+
+![binary3](./img/bin.PNG)
 
 
 
+![binary3](./img/bin1.PNG)
+
+이진 탐색 트리의 삭제의 경우
+
+1. 삭제할 노드가 단말 노드인 경우(no child)
+
+   ![binary3](./img/bin3.PNG)
+
+2. 삭제할 노드가 하나의 자식 노드를 갖는 경우(one child)
+
+   ![binary3](./img/bin4.PNG)
+
+3. 삭제할 노드가 두 개의 자식 노드를 갖는 경우(two child)
+
+   ![binary3](./img/bin5.PNG)
+
+- 탐색 O(logn)
+- 삽입 O(logn)
+- 삭제 O(logn)
