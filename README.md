@@ -4,7 +4,7 @@ Today I Learned
 > **2019년 1월 ~ 2월**
 
 - [x] Algorithm(2018 SW 역량 테스트 준비 - 기초, https://code.plus/course/32)  
-- [ ] Algorithm(2018 SW 역량 테스트 준비 - 연습, https://code.plus/course/33)
+- [x] Algorithm(2018 SW 역량 테스트 준비 - 연습, https://code.plus/course/33)
 - [ ] Algorithm(2018 SW 역량 테스트 준비 - 문제, https://code.plus/course/34)
 - [x] Computer Network(성공과 실패를 결정하는 1%의 네트워크 원리)
 - [x] Data Structure(Do it 자료구조와 함께 배우는 알고리즘 입문)
