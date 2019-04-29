@@ -287,7 +287,7 @@ fast forward은 commit을 생성하지 않음
 
 ![merge](./assets/merge(3).PNG)
 
-![merge](./assets/emerge(4).PNG)
+![merge](./assets/merge(4).PNG)
 
 ![merge](./assets/merge(5).PNG)
 
