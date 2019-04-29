@@ -13,4 +13,4 @@ Today I Learned
 
 
 
-![goal](./clip/goal.png)
+![goal](../clip/goal.png)
